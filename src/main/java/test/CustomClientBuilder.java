@@ -4,6 +4,7 @@ import org.hl7.fhir.r4.formats.IParser;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.client.api.IClientInterceptor;
+import ca.uhn.fhir.rest.client.impl.RestfulClientFactory;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 import ca.uhn.fhir.rest.client.api.ServerValidationModeEnum;
 import ca.uhn.fhir.rest.client.interceptor.BasicAuthInterceptor;
@@ -14,7 +15,7 @@ import ca.uhn.fhir.rest.client.interceptor.UrlTenantSelectionInterceptor;
 /**
  * CustomClientBuilder
  * 
- * Generates the FHIR Context of the skeletton
+ * Generates the FHIR Context of the skeleton
  * 
  * 
  */
