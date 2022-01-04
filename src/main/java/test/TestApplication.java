@@ -8,6 +8,7 @@ import ca.uhn.fhir.rest.client.api.IGenericClient;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 
 import org.hl7.fhir.instance.model.api.IIdType;
+import org.hl7.fhir.r4.model.Immunization;
 import org.hl7.fhir.r4.model.Patient;
 
 import java.io.IOException;
@@ -20,23 +21,33 @@ public class TestApplication {
     * This is the Java main method, which gets executed
     */
    public static void main(String[] args) {
-      String fileName = "examplePatient.xml"; String id = "example";
+      String fileNamePatient = "examplePatient.xml";
+      String fileNameImmunization = "testImmunization.xml";
       // String fileName = "patient-example-a(pat1).xml"; String id = "pat1";
 
       Patient patient;
+      Immunization immunization;
       String response;
       try {
-         patient = ctx.newXmlParser().parseResource(Patient.class,  Files.readString( Path.of("src/main/resources/samples/Patient/" + fileName)));
-  
+         patient = ctx.newXmlParser().parseResource(Patient.class,  Files.readString( Path.of("src/main/resources/samples/Patient/" + fileNamePatient)));
+         immunization = ctx.newXmlParser().parseResource(Immunization.class,  Files.readString( Path.of("src/main/resources/samples/Immunization/" + fileNameImmunization)));
+         
          ResourceClient.write(patient);
 
-         response = ResourceClient.read("Patient", id);
-         System.err.println(response);
+         response = ResourceClient.read("Patient", patient.getId());
+         // System.err.println(response);
 
-         ResourceClient.delete("Patient", id);
+         ResourceClient.write(immunization);
+
+         response = ResourceClient.read("Immunization", immunization.getId());
+         // System.err.println(response);
+
+         ResourceClient.delete("Immunization", patient.getId());
+
+         ResourceClient.delete("Patient", patient.getId());
          
-         response = ResourceClient.read("Patient", id);
-         System.err.println(response);
+         // response = ResourceClient.read("Patient", patient.getId());
+         // System.err.println(response);
 
       } catch (DataFormatException | IOException e) {
          System.err.println("unreadable file");
