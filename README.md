@@ -1,3 +1,9 @@
+# iis-sandbox-hapi-client-skeleton
+
+Client skeleton adapted to interact with the IIS-sandbox
+
+To interact with the IIS sandbox, you can copy the CustomClientBuilder and ResourceClient classes, and use it as in the example of TestApplication.
+
 # HAPI FHIR - Client Starter
 
 This project is a simple "skeleton project" (a Maven project containing all dependencies needed to run the HAPI FHIR client).
@@ -32,4 +38,3 @@ Here are some things to try:
    * [ ] Try modifying your *Read* code so that it displays a useful error if the resource has been deleted
 
 Note that you you can find a few hints and examples in `TestApplicationHints.java`
-# iis-sandbox-hapi-client-skeleton

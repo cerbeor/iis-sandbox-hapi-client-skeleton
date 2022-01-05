@@ -24,7 +24,7 @@ public class CustomClientBuilder {
     private static final String TENANT_A = "TENANT-A";
     private static final String LOCALHOST_9091 = "http://localhost:9091/iis-sandbox/fhir";
     private static final String FLORENCE = "https://florence.immregistries.org/iis-sandbox/fhir";
-    //Needs to be static
+    // Needs to be static object and built only one time in whole project
     private static final FhirContext CTX = FhirContext.forR4();
 
     private IGenericClient client = CTX.newRestfulGenericClient(LOCALHOST_9091);
@@ -33,14 +33,22 @@ public class CustomClientBuilder {
     private LoggingInterceptor loggingInterceptor;
 
     public CustomClientBuilder(){
-        this(TENANT_A,TENANT_A,TENANT_A);
+        this(LOCALHOST_9091, TENANT_A, TENANT_A, TENANT_A);
     }
 
-    public CustomClientBuilder(String tenantId, String username, String password){
+    public CustomClientBuilder(String serverURL){
+        this(serverURL, TENANT_A, TENANT_A, TENANT_A);
+    }
+
+    public CustomClientBuilder( String tenantId, String username, String password){
+        this(LOCALHOST_9091, tenantId, username, password);
+    }
+
+    public CustomClientBuilder(String serverURL, String tenantId, String username, String password){
         // Deactivate the request for server metadata
         CTX.getRestfulClientFactory().setServerValidationMode(ServerValidationModeEnum.NEVER);
         // Create a client
-        this.client = CTX.newRestfulGenericClient(LOCALHOST_9091);
+        this.client = CTX.newRestfulGenericClient(serverURL);
 
         // Register a logging interceptor
         this.loggingInterceptor = new LoggingInterceptor();
