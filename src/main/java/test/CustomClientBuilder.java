@@ -1,14 +1,14 @@
 package test;
 
-import org.hl7.fhir.r4.formats.IParser;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.client.api.IClientInterceptor;
-import ca.uhn.fhir.rest.client.impl.RestfulClientFactory;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
+import ca.uhn.fhir.rest.client.api.IHttpResponse;
 import ca.uhn.fhir.rest.client.api.ServerValidationModeEnum;
 import ca.uhn.fhir.rest.client.interceptor.BasicAuthInterceptor;
 import ca.uhn.fhir.rest.client.interceptor.LoggingInterceptor;
+import ca.uhn.fhir.rest.client.interceptor.ThreadLocalCapturingInterceptor;
 import ca.uhn.fhir.rest.client.interceptor.UrlTenantSelectionInterceptor;
 
 
@@ -31,6 +31,7 @@ public class CustomClientBuilder {
     private UrlTenantSelectionInterceptor tenantSelection;
     private IClientInterceptor authInterceptor;
     private LoggingInterceptor loggingInterceptor;
+    private ThreadLocalCapturingInterceptor threadLocalCapturingInterceptor;
 
     public CustomClientBuilder(){
         this(LOCALHOST_9091, TENANT_A, TENANT_A, TENANT_A);
@@ -44,6 +45,18 @@ public class CustomClientBuilder {
         this(LOCALHOST_9091, tenantId, username, password);
     }
 
+    public ThreadLocalCapturingInterceptor getCapturingInterceptor(){
+        return this.threadLocalCapturingInterceptor;
+    }
+
+    public IHttpResponse getLastResponse(){
+        return this.threadLocalCapturingInterceptor.getResponseForCurrentThread();
+    }
+
+    public IHttpResponse getLastRequest(){
+        return this.threadLocalCapturingInterceptor.getResponseForCurrentThread();
+    }
+
     public CustomClientBuilder(String serverURL, String tenantId, String username, String password){
         // Deactivate the request for server metadata
         CTX.getRestfulClientFactory().setServerValidationMode(ServerValidationModeEnum.NEVER);
@@ -55,6 +68,10 @@ public class CustomClientBuilder {
         this.loggingInterceptor.setLogRequestSummary(true);
         this.loggingInterceptor.setLogRequestBody(true);
         this.client.registerInterceptor(this.loggingInterceptor);
+
+        // Capturing interceptor that saves the last request and response
+        this.threadLocalCapturingInterceptor = new ThreadLocalCapturingInterceptor();
+        this.client.registerInterceptor(this.threadLocalCapturingInterceptor);
 
         // Register a tenancy interceptor to add /$tenantid to the url
         this.tenantSelection = new UrlTenantSelectionInterceptor(tenantId);

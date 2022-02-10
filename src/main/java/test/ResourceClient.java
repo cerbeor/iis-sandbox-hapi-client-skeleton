@@ -54,7 +54,6 @@ public abstract class ResourceClient {
         String response;
         try {
             resource = client.read().resource(resourceType).withId(resourceId).execute();
-            // resource = client.read().resource(Patient.class).withId(resourceId).execute();
             response = CTX.newXmlParser().setPrettyPrint(true).encodeResourceToString(resource);
           } catch (ResourceNotFoundException e) {
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  

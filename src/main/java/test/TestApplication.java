@@ -18,7 +18,6 @@ public class TestApplication {
    public static void main(String[] args) {
       String fileNamePatient = "examplePatient.xml";
       String fileNameImmunization = "testImmunization.xml";
-      // String fileName = "patient-example-a(pat1).xml"; String id = "pat1";
 
       Patient patient;
       Immunization immunization;
@@ -38,14 +37,12 @@ public class TestApplication {
          response = ResourceClient.read("Patient", id);
          System.err.println(response);
 
-         ResourceClient.write(immunization);
+         // ResourceClient.write(immunization);
+         // response = ResourceClient.read("Immunization", immunization.getId());
+         // System.err.println(response);
 
-         response = ResourceClient.read("Immunization", immunization.getId());
-         System.err.println(response);
-
-         ResourceClient.delete("Immunization", id);
-
-         response = ResourceClient.delete("Patient", id);
+         // ResourceClient.delete("Immunization", id);
+         // response = ResourceClient.delete("Patient", id);
 
          // response = ResourceClient.read("Patient", id);
          System.err.println(response);
